@@ -22,7 +22,7 @@ Inclusive Terminilogy Scanner is implemented as plugin for Sonar. Sonar provides
 
 ## Documentation
 
-** Analyzing Reports **
+### Analyzing Reports
 By default Sonar dashboard shows all issues in your project, including bugs, cosmetic, code complexity, security and finally ITS offensive terms.
 
 To narrow down report to ITS issues only, follow these steps:
@@ -35,7 +35,7 @@ Note: URL for this Sonar report can be bookmarked. Report can be easily accessed
 
 ![Screenshot](doc/issue-filter.png)
 
-** To analyze and fix issues **
+### Analyze and Fix Issues
 
 - select issue in report and click it - this opens source code page with issue analysis
 - review line of source code where issue is reported
