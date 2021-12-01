@@ -65,20 +65,17 @@ public class ItsFileScanner {
     }
 
     private void createViolation(SensorContext context, InputFile file, ItsScanRule rule, int line, String message) {
-        // no need to define the severity as it is automatically set according
-        // to the configured Quality profile
+        // no need to define the severity as it is automatically set according to the configured Quality profile
         NewIssue issue = context.newIssue().forRule(ITSRulesDefinition.ITS_RULE_KEY);
 
-        Severity severity = Severity.MAJOR;
-        if (rule.getSeverity() != null && rule.getSeverity().equalsIgnoreCase("high"))
-            severity = Severity.CRITICAL;
+        // Inclusive Terminology issues do NOT lead to security bugs or potential of maintainer to introduce new bugs in the future, 
+        // therefore according to Severity ratings on https://docs.sonarqube.org/7.3/RulesTypesandSeverities.html all these issues are Minor
 
         NewIssueLocation location = issue.newLocation()
              .on(file)
              .at(file.selectLine(line))
              .message(message);
         issue.at(location);
-        issue.overrideSeverity(severity);
         issue.save();
 
     }

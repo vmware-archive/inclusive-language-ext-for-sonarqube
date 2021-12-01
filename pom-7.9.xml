@@ -44,6 +44,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+
+		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>${gson.version}</version>
@@ -80,7 +86,6 @@
 		</dependency>
 
         <!-- tests use Sonar API 8, so they are disabled for Sonar 7.9
-        more test: blacklist he disable test 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>

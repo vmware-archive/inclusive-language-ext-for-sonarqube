@@ -15,7 +15,7 @@ import org.sonar.plugins.java.api.tree.BaseTreeVisitor;
 @Rule(key = ITSRule.KEY,
     name = "Inclusive Terminology Scanner",
     description = "Scan text/source files for presense of offensive terms",
-    priority = Priority.MAJOR)
+    priority = Priority.MINOR)
 public class ITSRule extends BaseTreeVisitor implements JavaFileScanner {
 
     public static final String KEY = "ITSRule";
