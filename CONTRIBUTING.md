@@ -63,6 +63,25 @@ notification when you git push.
 
 ### Code Style
 
+#### Copyright and License Information
+
+Please add copyright and license information at the beginning of your source code or any other files regarding project. And CI pipeline will check your copyright and license information.
+
+    Copyright <copyright start year>-<current year> VMware, Inc.
+
+    SPDX-License-Identifier: BSD-2
+
+Example for Java file:
+
+    /*******************************************************************************
+
+     * Copyright 2019-2022 VMware, Inc.
+ 
+     * SPDX-License-Identifier: BSD-2
+ 
+     ******************************************************************************/
+
+
 ### Formatting Commit Messages
 
 We follow the conventions on [How to Write a Git Commit Message](http://chris.beams.io/posts/git-commit/).
