@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright 2022 VMware, Inc.
-# SPDX-License-Identifier: EPL-2.0
+# SPDX-License-Identifier: BSD-2 License
 #
 """ Check files license and copyright header
     Argument: -f, --files, given files or directories list, split by ':' in local
@@ -19,15 +19,6 @@
               -l, --list, extensions of files to be checked, separate by ':', invalid once argument '-a' exists.
                 If no given, use extensions in constant 'SOURCE_CODE_EXTENSIONS'
 
-    Scenario 1: Using in travis ci
-        Only check the commit files, just need '-f' and optional '-n' argument
-        example: python3 ./check_headers.py -f "$(git diff --name-only $TRAVIS_COMMIT_RANGE)" -n 10
-    Scenario 2: Using in local developing evnironment
-        python ./check_headers.py -f "singleton/singleton-g11n-csharp-client:singleton/singleton-g11n-js-client"
-                                  -e "singleton/singleton-g11n-js-client/samples"
-                                  -p ".*Copyright [1-9][0-9]{3}(-[1-9][0-9]{3})? VMware, Inc\.\s+\n.*SPDX-License-Identifier: EPL-2.0\s+$"
-                                  -l "js:cs:html"
-
 """
 import os
 import re
@@ -39,7 +30,7 @@ import datetime
 SOURCE_CODE_EXTENSIONS = [".java", ".go", ".ts", ".js", ".asp", ".aspx", ".jsp", ".html", ".css", ".php",
 ".sh", ".py", ".rb", ".cpp", ".c", ".cs", ".h", ".hpp", ".swift", ".sql", ".vb", ".ps1", ".m", ".mm", ".gradle", ".bat", ".xml"]
 REQUIRED_PATTERN_LIST = ["makefile", "dockerfile"] #name list of file must to be checked even extension name is not in the list or has no extension name, case not sensitive
-SINGLETON_PATTERN = ".*Copyright ([1-9][0-9]{3}-)?"+str(datetime.datetime.now().year)+" VMware, Inc\.\s+\n.*SPDX-License-Identifier: EPL-2.0\s+$"
+SINGLETON_PATTERN = ".*Copyright ([1-9][0-9]{3}-)?"+str(datetime.datetime.now().year)+" VMware, Inc\.\s+\n.*SPDX-License-Identifier: BSD-2\s+$"
 NOT_REQUIRED_PATTERN_LIST = ["__init__.py", ".*.designer.cs"]
 PATH_SEPARATOR = ":"
 EXTENSION_SEPARATOR = ":"
