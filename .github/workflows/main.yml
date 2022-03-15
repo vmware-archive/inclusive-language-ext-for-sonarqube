@@ -1,0 +1,117 @@
+name: Inclusive Language Extension For Sonarqube
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2  -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
+
+jobs:
+  pre-flight:
+    name: Pre Flight
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2.
+      - name: Get commit range
+        id: get-commit-range-action
+        uses: ./.github/actions/get-commit-range-action
+
+  check-header:
+    name: Check Header
+    runs-on: ubuntu-latest
+    needs: pre-flight
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2.
+      - name: Get commit range
+        id: get-commit-range-action
+        uses: ./.github/actions/get-commit-range-action
+      - name: Get Python
+        uses: actions/setup-python@v2
+      - name: Check header
+        shell: bash
+        run: |
+          git diff ${{ steps.get-commit-range-action.outputs.commit-range }} --stat
+          git diff --name-only --diff-filter=d ${{ steps.get-commit-range-action.outputs.commit-range }}
+          python .github/actions/get-commit-range-action/check_headers.py -f "$(git diff --name-only --diff-filter=d ${{ steps.get-commit-range-action.outputs.commit-range }})"
+
+  security-analysis:
+    name: CodeQL Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v1
+        with:
+          languages: java
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v1
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v1
+
+  run-unit-test:
+    name: Run Unit Tests
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2.
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3.0.0
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+          cache: maven
+      - name: Run Unit test
+        run: |
+          mvn clean test
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v2
+        with:
+          file: ./target/site/jacoco/jacoco.xml
+          flags: unittests
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+  generate-version:
+    name: Generate Version
+    runs-on: ubuntu-20.04
+    needs: run-unit-test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2.
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3.0.0
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+          cache: maven
+      - name: "Generate Package version: 8"
+        run: |
+          mvn clean package -DskipTests
+      - uses: actions/upload-artifact@v2
+        with:
+          name: ext-its-v8
+          path: target/vmw-its-scanner*.jar
