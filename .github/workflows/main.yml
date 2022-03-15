@@ -45,13 +45,12 @@ jobs:
           python .github/actions/get-commit-range-action/check_headers.py -f "$(git diff --name-only --diff-filter=d ${{ steps.get-commit-range-action.outputs.commit-range }})"
 
   security-analysis:
-    name: Analyze
+    name: CodeQL Analyze
     runs-on: ubuntu-latest
     permissions:
       actions: read
       contents: read
       security-events: write
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -93,8 +92,9 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-  generate-version8:
-    name: Generate Version 8
+
+  generate-version:
+    name: Generate Version
     runs-on: ubuntu-20.04
     needs: run-unit-test
     steps:
