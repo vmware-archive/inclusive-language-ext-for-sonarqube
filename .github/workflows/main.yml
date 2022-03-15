@@ -21,7 +21,6 @@ jobs:
     defaults:
       run:
         shell: bash
-    needs: pre-process
     if: needs.pre-process.outputs.were-only-docs-updated != 'yes'
     permissions:
       actions: read
