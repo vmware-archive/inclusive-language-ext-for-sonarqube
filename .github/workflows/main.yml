@@ -1,0 +1,28 @@
+# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
+
+name: Inclusive Language Extension For Sonarqube
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  run-unit-test:
+    name: Run Unit Tests
+    runs-on: ubuntu-20.04
+    env:
+      MAVEN_OPTS: "-Dhttps.protocols=TLSv1.2  -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN -Dorg.slf4j.simpleLogger.showDateTime=true -Djava.awt.headless=true"
+      MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2.
+      - name: Setup Java JDK
+        uses: actions/setup-java@v3.0.0
+      - name: Run Unit test
+        run: |
+          mvn clean test
