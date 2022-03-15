@@ -23,6 +23,9 @@ jobs:
           fetch-depth: 2.
       - name: Setup Java JDK
         uses: actions/setup-java@v3.0.0
+        with:
+          distribution: 'adopt'
+          java-version: '11'
       - name: Run Unit test
         run: |
           mvn clean test
