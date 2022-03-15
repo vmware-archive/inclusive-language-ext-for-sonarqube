@@ -1,6 +1,3 @@
-# This workflow will build a Java project with Gradle and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
-
 name: Inclusive Language Extension For Sonarqube
 
 on:
@@ -14,6 +11,39 @@ env:
   MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version"
 
 jobs:
+  pre-flight:
+    name: Pre Flight
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2.
+      - name: Get commit range
+        id: get-commit-range-action
+        uses: ./.github/actions/get-commit-range-action
+
+  check-header:
+    name: Check Header
+    runs-on: ubuntu-latest
+    needs: pre-flight
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 2.
+      - name: Get commit range
+        id: get-commit-range-action
+        uses: ./.github/actions/get-commit-range-action
+      - name: Get Python
+        uses: actions/setup-python@v2
+      - name: Check header
+        shell: bash
+        run: |
+          git diff ${{ steps.get-commit-range-action.outputs.commit-range }} --stat
+          git diff --name-only --diff-filter=d ${{ steps.get-commit-range-action.outputs.commit-range }}
+          python .github/actions/get-commit-range-action/check_headers.py -f "$(git diff --name-only --diff-filter=d ${{ steps.get-commit-range-action.outputs.commit-range }})"
+
   security-analysis:
     name: Analyze
     runs-on: ubuntu-latest
@@ -21,17 +51,14 @@ jobs:
       actions: read
       contents: read
       security-events: write
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ 'java' ]
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v1
         with:
-          languages: ${{ matrix.language }}
+          languages: java
       - name: Autobuild
         uses: github/codeql-action/autobuild@v1
       - name: Perform CodeQL Analysis
@@ -53,10 +80,9 @@ jobs:
           cache: maven
       - name: Run Unit test
         run: |
-          mvn clean test 
-          ls -al ./target/site/jacoco/
+          mvn clean test
       - name: Upload to Codecov
-        uses: codecov/codecov-action@v2.0.2
+        uses: codecov/codecov-action@v2
         with:
           file: ./target/site/jacoco/jacoco.xml
           flags: unittests
