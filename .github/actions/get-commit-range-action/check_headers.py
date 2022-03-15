@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #
 # Copyright 2022 VMware, Inc.
-# SPDX-License-Identifier: BSD-2 License
+# SPDX-License-Identifier: BSD-2
 #
 """ Check files license and copyright header
     Argument: -f, --files, given files or directories list, split by ':' in local
