@@ -112,7 +112,7 @@
 					<pluginName>VMware Inclusive Terminology Extension</pluginName>
 					<pluginClass>org.sonar.plugins.its.java.ITSRulesPlugin</pluginClass>
 					<sonarLintSupported>true</sonarLintSupported>
-					<sonarQubeMinVersion>7.9</sonarQubeMinVersion>
+					<sonarQubeMinVersion>8.0</sonarQubeMinVersion>
 					<requirePlugins>java:${sonarjava.version}</requirePlugins>
 				</configuration>
 			</plugin>
