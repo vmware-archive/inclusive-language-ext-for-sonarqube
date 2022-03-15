@@ -30,10 +30,10 @@ jobs:
           cache: maven
       - name: Run Unit test
         run: |
-          mvn clean test
+          mvn clean test -q
 
   generate-version8:
-    name: Run Unit Tests
+    name: Generate Version 8
     runs-on: ubuntu-20.04
     needs: run-unit-test
     steps:
@@ -49,14 +49,14 @@ jobs:
           cache: maven
       - name: "Generate Package version: 8"
         run: |
-          mvn clean package
+          mvn clean package -DskipTests
       - uses: actions/upload-artifact@v2
         with:
           name: ext-its-v8
           path: target/vmw-its-scanner*.jar
 
   generate-version79:
-    name: Run Unit Tests
+    name: Generate Version 7.9
     runs-on: ubuntu-20.04
     needs: run-unit-test
     steps:
@@ -72,7 +72,7 @@ jobs:
           cache: maven
       - name: "Generate Package version: 7.9"
         run: |
-          mvn -f pom-7.9.xml clean package
+          mvn -f pom-7.9.xml clean package -DskipTests
       - uses: actions/upload-artifact@v2
         with:
           name: ext-its-v7.9
