@@ -1,3 +1,7 @@
+/***********************************************************
+ * Copyright 2022 VMware, Inc.
+ * SPDX-License-Identifier: BSD-2
+ ***********************************************************/
 package org.sonar.plugins.its.java;
 
 public class SourceComment {
