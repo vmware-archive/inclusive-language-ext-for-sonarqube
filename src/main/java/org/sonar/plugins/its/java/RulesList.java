@@ -9,7 +9,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.sonar.plugins.its.java.checks.ITSRule;
+import org.sonar.plugins.its.java.checks.ITSCommentsRule;
+import org.sonar.plugins.its.java.checks.ITSSourceRule;
 import org.sonar.plugins.java.api.JavaCheck;
 
 public final class RulesList {
@@ -25,7 +26,7 @@ public final class RulesList {
   }
 
   public static List<Class<? extends JavaCheck>> getJavaChecks() {
-    return Collections.unmodifiableList(Arrays.asList(ITSRule.class));
+    return Collections.unmodifiableList(Arrays.asList(ITSSourceRule.class, ITSCommentsRule.class));
   }
 
   public static List<Class<? extends JavaCheck>> getJavaTestChecks() {
