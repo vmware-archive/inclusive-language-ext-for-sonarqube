@@ -1,5 +1,5 @@
 /***********************************************************
- * Copyright 2021 VMware, Inc.
+ * Copyright 2022 VMware, Inc.
  * SPDX-License-Identifier: BSD-2
  ***********************************************************/
 package org.sonar.plugins.its.java.checks;
@@ -12,20 +12,17 @@ import org.sonar.plugins.java.api.JavaFileScanner;
 import org.sonar.plugins.java.api.JavaFileScannerContext;
 import org.sonar.plugins.java.api.tree.BaseTreeVisitor;
 
-@Rule(key = ITSRule.KEY,
-    name = "Inclusive Terminology Scanner",
-    description = "Scan text/source files for presense of offensive terms",
-    priority = Priority.MINOR)
-public class ITSRule extends BaseTreeVisitor implements JavaFileScanner {
+@Rule(key = ITSSourceRule.KEY, name = "Inclusive Terminology Source Scanner", description = "Scan text/source files for presense of offensive terms", priority = Priority.MINOR)
+public class ITSSourceRule extends BaseTreeVisitor implements JavaFileScanner {
 
-    public static final String KEY = "ITSRule";
+    public static final String KEY = "ITSSourceRule";
 
-    public ITSRule() {
+    public ITSSourceRule() {
         super();
-        logger.info("ITSRule: created");
+        logger.info("ITSSourceRule: created");
     }
 
-    private static final Logger logger = LoggerFactory.getLogger(ITSRule.class);
+    private static final Logger logger = LoggerFactory.getLogger(ITSSourceRule.class);
 
     protected static final String COMPANY_NAME = "VMware";
 

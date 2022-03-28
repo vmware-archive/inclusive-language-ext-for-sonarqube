@@ -1,5 +1,5 @@
 /***********************************************************
- * Copyright 2021 VMware, Inc.
+ * Copyright 2022 VMware, Inc.
  * SPDX-License-Identifier: BSD-2
  ***********************************************************/
 package org.sonar.plugins.its.java;
@@ -20,7 +20,8 @@ import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
 import org.sonar.api.utils.AnnotationUtils;
-import org.sonar.plugins.its.java.checks.ITSRule;
+import org.sonar.plugins.its.java.checks.ITSCommentsRule;
+import org.sonar.plugins.its.java.checks.ITSSourceRule;
 import org.sonar.plugins.java.api.JavaCheck;
 
 import com.google.gson.Gson;
@@ -35,15 +36,16 @@ public class ITSRulesDefinition implements RulesDefinition {
   private static final String RESOURCE_BASE_PATH = "/java";
 
   public static final String REPOSITORY_KEY = "vmw-its-java";
-  public static final RuleKey ITS_RULE_KEY = RuleKey.of(REPOSITORY_KEY, ITSRule.KEY);
+  public static final RuleKey ITS_RULE_KEY = RuleKey.of(REPOSITORY_KEY, ITSSourceRule.KEY);
+  public static final RuleKey ITS_COMMENT_RULE_KEY = RuleKey.of(REPOSITORY_KEY, ITSCommentsRule.KEY);
 
   private final Gson gson = new Gson();
 
   @Override
   public void define(Context context) {
     NewRepository repository = context
-      .createRepository(REPOSITORY_KEY, "java")
-      .setName("VMware ITS Repository");
+        .createRepository(REPOSITORY_KEY, "java")
+        .setName("VMware ITS Repository");
 
     for (Class<? extends JavaCheck> check : RulesList.getChecks()) {
       new RulesDefinitionAnnotationLoader().load(repository, check);
