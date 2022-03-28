@@ -37,7 +37,7 @@ public class VmwItsRulesDefinitionTest {
   private void assertRuleProperties(Repository repository) {
     Rule rule = repository.rule(ITSSourceRule.KEY);
     assertThat(rule).isNotNull();
-    assertThat(rule.name()).isEqualTo("Inclusive Terminology Scanner");
+    assertThat(rule.name()).isEqualTo("Inclusive Terminology Source Scanner");
     // assertThat(rule.debtRemediationFunction().type()).isEqualTo(Type.CONSTANT_ISSUE);
     assertThat(rule.type()).isEqualTo(RuleType.CODE_SMELL);
   }
