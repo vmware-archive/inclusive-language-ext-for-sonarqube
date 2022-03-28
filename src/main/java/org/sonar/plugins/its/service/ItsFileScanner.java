@@ -84,6 +84,7 @@ public class ItsFileScanner {
 
                 lineNumberOfTriggerMatch = LineNumberFinderUtil.countLines(entireFileAsString, positionOfMatch);
 
+                // checks if in comment and sets different rule
                 if (isInComment(matcher, comments)) {
                     String message = "Offensive term: " + rule.getTerm() + ", replace with: " + rule.getReplacements();
                     logger.info("COMMENT Offensive Term "+path + ":" + lineNumberOfTriggerMatch + " - " + message);
