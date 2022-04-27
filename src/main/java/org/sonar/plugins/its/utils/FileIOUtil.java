@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.Buffer;
 import java.nio.BufferOverflowException;
 import java.nio.CharBuffer;
 import java.nio.charset.CharsetDecoder;
@@ -43,7 +44,7 @@ public final class FileIOUtil {
         LOG.warn("Its scanner (RequiredStringNotPresentRegexMatchCheck) maximum scan depth ( " + (failWhenCharacterCountExceeds-1) + " chars) encountered for file '" + path.toFile().getAbsolutePath() + "'. Did not check this file AT ALL.");
         throw new LargeFileEncounteredException();
       } else {
-        fileContentBuffer.flip();
+        ((Buffer)fileContentBuffer).flip();
       }
 
     } catch (BufferOverflowException ex) {
