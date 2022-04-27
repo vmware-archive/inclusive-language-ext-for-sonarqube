@@ -1,3 +1,8 @@
+/***********************************************************
+ * Copyright 2022 VMware, Inc.
+ * SPDX-License-Identifier: BSD-2
+ ***********************************************************/
+
 /**
  *Example of java file with offensive terms in code/comments.
  **/
