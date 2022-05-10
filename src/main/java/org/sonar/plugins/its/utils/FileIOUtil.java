@@ -44,7 +44,7 @@ public final class FileIOUtil {
         LOG.warn("Its scanner (RequiredStringNotPresentRegexMatchCheck) maximum scan depth ( " + (failWhenCharacterCountExceeds-1) + " chars) encountered for file '" + path.toFile().getAbsolutePath() + "'. Did not check this file AT ALL.");
         throw new LargeFileEncounteredException();
       } else {
-        ((Buffer)fileContentBuffer).flip();
+        fileContentBuffer.flip();
       }
 
     } catch (BufferOverflowException ex) {
