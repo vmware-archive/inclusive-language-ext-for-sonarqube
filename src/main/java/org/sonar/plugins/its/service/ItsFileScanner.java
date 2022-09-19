@@ -35,14 +35,16 @@ public class ItsFileScanner {
 
         List<SourceComment> comments = new ArrayList<SourceComment>();
 
+        // TODO add support for comments in Python, Ruby, HTML, JSON
+        // Check file extension and get the regex for the different file
         String slComment = "//[^\r\n]*";
         String mlComment = "/\\*[\\s\\S]*?\\*/";
-        String strLit = "\"(?:\\\\.|[^\\\\\"\r\n])*\"";
-        String chLit = "'(?:\\\\.|[^\\\\'\r\n])+'";
-        String any = "[\\s\\S]";
+//        String strLit = "\"(?:\\\\.|[^\\\\\"\r\n])*\"";
+//        String chLit = "'(?:\\\\.|[^\\\\'\r\n])+'";
+//        String any = "[\\s\\S]";
 
         Pattern p = Pattern.compile(
-                String.format("(%s)|(%s)|%s|%s|%s", slComment, mlComment, strLit, chLit, any));
+                String.format("(%s)|(%s)", slComment, mlComment)); //strLit, chLit, any));
 
         Path path = file.file().toPath();
         String entireFileAsString;

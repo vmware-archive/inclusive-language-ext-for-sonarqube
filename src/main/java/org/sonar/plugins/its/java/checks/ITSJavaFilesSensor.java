@@ -42,16 +42,21 @@ public class ITSJavaFilesSensor implements Sensor {
         FileSystem fs = context.fileSystem();
         Iterable<InputFile> files = fs.inputFiles(fs.predicates().all());
         for (InputFile file : files) {
+            try {
+                String filename = file.filename();
+                String fileExt = FilenameUtils.getExtension(filename).toLowerCase();
+                if (fileExt.toLowerCase().equalsIgnoreCase("jar") || fileExt.toLowerCase().equalsIgnoreCase("zip")) {
+                    logger.info("ITSRule: skipping binary file " + filename);
+                    continue;
+                }
+                logger.info("Scanning " + file.filename());
 
-            String filename = file.filename();
-            String fileExt = FilenameUtils.getExtension(filename).toLowerCase();
-            if (fileExt.toLowerCase().equalsIgnoreCase("jar") || fileExt.toLowerCase().equalsIgnoreCase("zip")) {
-                logger.info("ITSRule: skipping binary file " + filename);
-                continue;
+                ItsFileScanner scanner = new ItsFileScanner();
+                scanner.scanFile(context, this, file);
+            } catch (Exception e) {
+                logger.error("An error occurred with file " + file.filename());
+                logger.error(e.getMessage(), e.getStackTrace());
             }
-
-            ItsFileScanner scanner = new ItsFileScanner();
-            scanner.scanFile(context, this, file);
         }
     }
 
