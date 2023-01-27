@@ -1,5 +1,5 @@
 /***********************************************************
- * Copyright 2022 VMware, Inc.
+ * Copyright 2023 VMware, Inc.
  * SPDX-License-Identifier: BSD-2
  ***********************************************************/
 package org.sonar.plugins.its.utils;
@@ -44,7 +44,7 @@ public final class FileIOUtil {
         LOG.warn("Its scanner (RequiredStringNotPresentRegexMatchCheck) maximum scan depth ( " + (failWhenCharacterCountExceeds-1) + " chars) encountered for file '" + path.toFile().getAbsolutePath() + "'. Did not check this file AT ALL.");
         throw new LargeFileEncounteredException();
       } else {
-        fileContentBuffer.flip();
+        ((Buffer)fileContentBuffer).flip();
       }
 
     } catch (BufferOverflowException ex) {
