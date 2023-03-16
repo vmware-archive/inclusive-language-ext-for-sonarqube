@@ -1,5 +1,5 @@
 /***********************************************************
- * Copyright 2022 VMware, Inc.
+ * Copyright 2023 VMware, Inc.
  * SPDX-License-Identifier: BSD-2
  ***********************************************************/
 package org.sonar.plugins.its.java.checks;
@@ -17,7 +17,7 @@ import org.sonar.plugins.java.api.tree.BaseTreeVisitor;
  * It should detect master, slave, kill, etc
  */
 @Rule(key = ITSCommentsRule.KEY, name = "Inclusive Terminology Comments Scanner",
-        description = "Scan text/source files comments for presense of offensive terms",
+        description = "Scan text/source files comments for presence of offensive terms",
         priority = Priority.MAJOR)
 public class ITSCommentsRule extends BaseTreeVisitor implements JavaFileScanner {
 

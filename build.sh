@@ -1,5 +1,5 @@
 #!/bin/bash
-# Copyright 2022 VMware, Inc.
+# Copyright 2023 VMware, Inc.
 # SPDX-License-Identifier: BSD-2
 pwd
 mkdir plugins
