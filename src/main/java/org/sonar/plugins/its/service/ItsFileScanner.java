@@ -1,5 +1,5 @@
 /***********************************************************
- * Copyright 2022 VMware, Inc.
+ * Copyright 2023 VMware, Inc.
  * SPDX-License-Identifier: BSD-2
  ***********************************************************/
 package org.sonar.plugins.its.service;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,14 +24,18 @@ import org.sonar.plugins.its.utils.FileIOUtil;
 import org.sonar.plugins.its.utils.LargeFileEncounteredException;
 import org.sonar.plugins.its.utils.LineNumberFinderUtil;
 
-/** Implementation of regex scanner using ITS rules */
+/**
+ * Implementation of regex scanner using ITS rules
+ */
 public class ItsFileScanner {
 
     private static final Logger logger = LoggerFactory.getLogger(ItsFileScanner.class);
     protected static final int MAX_CHARACTERS_SCANNED = 10 * 1024 * 1024; // 10 Mb limit
 
-    /** Scan file for offensive terms */
-    public void scanFile(SensorContext context, Sensor sensor, InputFile file) {
+    /**
+     * Scan file for offensive terms
+     */
+    public void scanFile(SensorContext context, InputFile file, List<String> excludeTerms) {
         int lineNumberOfTriggerMatch = -1;
 
         List<SourceComment> comments = new ArrayList<SourceComment>();
@@ -71,7 +76,17 @@ public class ItsFileScanner {
             }
         }
 
-        List<ItsScanRule> rules = ItsRulesManager.getRules();
+        List<ItsScanRule> rules = ItsRulesManager.getRules()
+                .stream()
+                .filter(rule -> {
+                    if (excludeTerms != null && !excludeTerms.isEmpty()) {
+                        return !excludeTerms.contains(rule.getTerm());
+                    } else {
+                        return true;
+                    }
+                })
+                .collect(Collectors.toList());
+
         if (rules == null)
             return;
 
@@ -89,11 +104,11 @@ public class ItsFileScanner {
                 // checks if in comment and sets different rule
                 if (isInComment(matcher, comments)) {
                     String message = "Offensive term: " + rule.getTerm() + ", replace with: " + rule.getReplacements();
-                    logger.info("COMMENT Offensive Term "+path + ":" + lineNumberOfTriggerMatch + " - " + message);
+                    logger.info("COMMENT Offensive Term " + path + ":" + lineNumberOfTriggerMatch + " - " + message);
                     createViolation(context, file, rule, lineNumberOfTriggerMatch, message, true);
                 } else {
                     String message = "SOURCE Offensive term: " + rule.getTerm() + ", replace with: " + rule.getReplacements();
-                    logger.info("SOURCE Offensive Term "+path + ":" + lineNumberOfTriggerMatch + " - " + message);
+                    logger.info("SOURCE Offensive Term " + path + ":" + lineNumberOfTriggerMatch + " - " + message);
                     createViolation(context, file, rule, lineNumberOfTriggerMatch, message, false);
                 }
             }
@@ -115,7 +130,7 @@ public class ItsFileScanner {
     }
 
     private void createViolation(SensorContext context, InputFile file, ItsScanRule rule, int line, String message,
-            boolean commentRule) {
+                                 boolean commentRule) {
         // no need to define the severity as it is automatically set according to the
         // configured Quality profile
         NewIssue issue;

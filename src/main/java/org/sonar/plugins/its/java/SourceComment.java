@@ -1,9 +1,13 @@
 /***********************************************************
- * Copyright 2022 VMware, Inc.
+ * Copyright 2023 VMware, Inc.
  * SPDX-License-Identifier: BSD-2
  ***********************************************************/
 package org.sonar.plugins.its.java;
 
+/**
+ * Class describing the start and the end of a comment.
+ * The term master shouldn't be detected here because of the external configuration.
+ */
 public class SourceComment {
     private long start;
     private long end;

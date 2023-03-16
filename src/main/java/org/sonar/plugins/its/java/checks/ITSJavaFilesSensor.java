@@ -1,5 +1,5 @@
 /***********************************************************
- * Copyright 2022 VMware, Inc.
+ * Copyright 2023 VMware, Inc.
  * SPDX-License-Identifier: BSD-2
  ***********************************************************/
 package org.sonar.plugins.its.java.checks;
@@ -12,8 +12,12 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.plugins.its.service.ConfigService;
 import org.sonar.plugins.its.service.ItsFileScanner;
 import org.sonar.plugins.java.api.JavaFileScannerContext;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Generates issues on all java files at line 1. This rule must be activated in
@@ -41,6 +45,9 @@ public class ITSJavaFilesSensor implements Sensor {
     public void execute(SensorContext context) {
         FileSystem fs = context.fileSystem();
         Iterable<InputFile> files = fs.inputFiles(fs.predicates().all());
+
+        Map<String, List<String>> config = ConfigService.loadConfig(context);
+
         for (InputFile file : files) {
             try {
                 String filename = file.filename();
@@ -50,9 +57,8 @@ public class ITSJavaFilesSensor implements Sensor {
                     continue;
                 }
                 logger.info("Scanning " + file.filename());
-
                 ItsFileScanner scanner = new ItsFileScanner();
-                scanner.scanFile(context, this, file);
+                scanner.scanFile(context, file, config.get(file.relativePath()));
             } catch (Exception e) {
                 logger.error("An error occurred with file " + file.filename());
                 logger.error(e.getMessage(), e.getStackTrace());
